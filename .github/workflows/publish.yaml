@@ -27,7 +27,7 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: test-base
-        file: Dockerfile
+        file: test-base/Dockerfile
         no-cache: true
         platforms: linux/amd64,linux/arm,linux/arm64
         push: ${{ github.event_name != 'pull_request' }}
