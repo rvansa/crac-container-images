@@ -26,7 +26,7 @@ jobs:
       id: build-and-push
       uses: docker/build-push-action@v4
       with:
-        context: .
+        context: test-base
         file: test-base/Dockerfile
         no-cache: true
         platforms: linux/amd64,linux/arm,linux/arm64
