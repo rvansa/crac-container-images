@@ -4,10 +4,11 @@ on:
     branches:
     - main
 jobs:
-  publish-test-base-image:
+  publish-images:
     runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: ghcr.io/crac/test-base
+    strategy:
+      matrix:
+        IMAGE_DIR: [ test-base, test-base-musl ]
     steps:
     - uses: actions/checkout@v2
     - name: Set up QEMU
@@ -26,11 +27,10 @@ jobs:
       id: build-and-push
       uses: docker/build-push-action@v4
       with:
-        context: test-base
-        file: test-base/Dockerfile
+        context: ${{ matrix.IMAGE_DIR }}
+        file: ${{ matrix.IMAGE_DIR }}/Dockerfile
         no-cache: true
         platforms: linux/amd64,linux/arm,linux/arm64
         push: ${{ github.event_name != 'pull_request' }}
-        tags: |
-          ${{ env.IMAGE_NAME }}
+        tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.IMAGE_DIR }}
 
