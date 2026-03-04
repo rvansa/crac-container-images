@@ -7,7 +7,10 @@ RUN cd /tmp/ld-preload-open \
 	&& sed -i -e 's/.*\(define DISABLE_FTW\)/#\1/g' path-mapping.c \
 	&& sed -i '1i#define __OPEN_NEEDS_MODE(oflag) (((oflag) & O_CREAT) != 0 || ((oflag) & O_TMPFILE) == O_TMPFILE)' path-mapping.c \
 	&& make all
+RUN cd /tmp && wget https://github.com/checkpoint-restore/criu/archive/refs/tags/v4.2.tar.gz && tar xzf v4.2.tar.gz
+RUN cd /tmp/criu-4.2/ && contrib/dependencies/apk-packages.sh && make install
 
 FROM alpine:latest
-RUN apk add util-linux
+RUN apk add gnutls libnet libnl3 nftables protobuf-c util-linux 
 COPY --from=builder /tmp/ld-preload-open/path-mapping-quiet.so /opt/path-mapping-quiet.so
+COPY --from=builder /tmp/criu-4.2/criu/criu /usr/sbin/criu
