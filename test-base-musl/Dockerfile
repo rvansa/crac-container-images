@@ -11,6 +11,6 @@ RUN cd /tmp && wget https://github.com/checkpoint-restore/criu/archive/refs/tags
 RUN cd /tmp/criu-4.2/ && contrib/dependencies/apk-packages.sh && make install
 
 FROM alpine:latest
-RUN apk add gnutls libnet libnl3 nftables protobuf-c util-linux 
+RUN apk add gnutls libnet libnl3 nftables protobuf-c util-linux
 COPY --from=builder /tmp/ld-preload-open/path-mapping-quiet.so /opt/path-mapping-quiet.so
 COPY --from=builder /tmp/criu-4.2/criu/criu /usr/sbin/criu
